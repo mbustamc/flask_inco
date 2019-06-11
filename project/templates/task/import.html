@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+    <p>Excel file upload (xls, xlsx, ods please)</p>
+     <div class="col-lg-8">
+    <form action="" method=post enctype=multipart/form-data><p>
+    <input type=file name=file><input type=submit value=Upload>
+    </form>
+   </div>
+
+
+            {% endblock %}
