@@ -38,25 +38,36 @@ class User(UserMixin, db.Model):
 def load_user(id):
     return User.query.get(int(id))
 
+class Area(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), index=True, unique=True)
+    maquinas = db.relationship('Maquina', backref='area', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Area: %s>' % self.name
+
+
+class Maquina(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), index=True, unique=True)
+    maquina_id = db.Column(db.Integer, db.ForeignKey('area.id'))
+
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    area = db.Column(db.Text)
     content = db.Column(db.Text)
     done = db.Column(db.Boolean, default=False)
+
+
     created = db.Column(db.DateTime, default=datetime.utcnow)
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
 
 
 
-    def __init__(self, content, done):
+    def __init__(self, content):
         self.content = content
-        self.done = done
+        #self.done = done
 
     def __repr__(self):
         return '<Content %s>' % self.content
-
-    @property
-    def serialize(self):
-        return {'content': self.content, 'done': self.done }
-
-        

@@ -1,7 +1,6 @@
 from datetime import datetime
 from flask import render_template, flash, redirect, url_for, session, request, jsonify
 from flask_login import login_required, current_user
-from flask_csv import send_csv
 import flask_excel as excel
 
 
@@ -10,8 +9,7 @@ import json
 from project.task import bp
 from project import db
 
-from project.models import Task
-
+from project.models import *
 
 from .forms import TaskForm
 
@@ -27,9 +25,12 @@ def list():
 def add_task():
     title = "Add TaskForm"
     form = TaskForm()
+
+    
     if form.validate_on_submit():
         content = request.form.get('content')
         task = Task(content)
+        task.area = form.area.data
         db.session.add(task)
         db.session.commit()
         return redirect(url_for('task.list'))
@@ -56,12 +57,15 @@ def modify_task(task_id):
     form = TaskForm()
     if form.validate_on_submit():
         task.content = form.content.data
+        task.area = form.area.data
         task.modify = datetime.utcnow()
         db.session.commit()
         flash('Your changes have been saved.')
         return redirect(url_for('task.list'))
     elif request.method == 'GET':
+        #form.populate_obj(task)
         form.content.data = task.content
+        form.area.data = task.area
     return render_template('task/modify_task.html', title=title, task=task,
         form=form)
 
@@ -92,7 +96,7 @@ def export():
 """
 
 @bp.route("/import", methods=['GET', 'POST'])
-def doimport():
+def do_import():
     if request.method == 'POST':
         def task_init_func(row):
             p = Task(row['content'], row['done'])
@@ -104,5 +108,9 @@ def doimport():
     return render_template('task/import.html')
 
 @bp.route("/export", methods=['GET'])
-def doexport():
-    return excel.make_response_from_tables(db.session, [Task], "xls")   
+def export():
+    #return excel.make_response_from_tables(db.session, [Task], "xls")
+    filtered_task = Task.query.filter_by(done=False).all()
+    column_names = ['id', 'area', 'content']
+    #eturn excel.make_response_from_tables(db.session, [Task], "xls")
+    return excel.make_response_from_query_sets(filtered_task, column_names, "xls")

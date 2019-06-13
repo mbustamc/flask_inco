@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "_formhelpers.html" import render_field %}
+
+{% block content %}
+
+{% if current_user.is_admin %}
+
+{% endif %}
+
+<table>
+<tr><th>Area</th>
+    <th>Borrar</th>
+        <th>Modificar</th>
+  </tr>
+  
+  {% for area in areas %}
+  <tr>
+    <td>
+     {{ area.name }} </td>
+   <td> 
+      
+    </tr>
+{% endfor %}
+</table>
+
+{% endblock content %}

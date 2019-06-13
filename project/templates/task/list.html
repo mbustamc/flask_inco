@@ -3,12 +3,9 @@
 
 {% block content %}
 
-{% if not current_user.is_anonymous %}
-<p>Nueva tarea ? <a href="{{ url_for('task.add_task') }}">Crear</a></p>
-{% endif %}
 
 <table>
-<tr>
+<tr><th>Area</th>
     <th>Tarea</th>
     <th>Resolver</th>
     <th>Borrar</th>
@@ -18,9 +15,9 @@
   {% for task in tasks %}
   <tr>
     <td>
-
-   
-        {% if task.done %} <strike> {% endif %}{{ task.content }} {% if task.done %} </strike>{% endif %}
+      {% if task.done %} <strike> {% endif %}{{ task.area }} {% if task.done %} </strike>{% endif %}</td>
+   <td> 
+        {% if task.done %} <strike> {% endif %}{{ task.content }} {% if task.done %} </strike>{% endif %}</td>
        <td>  <a href="{{ url_for('task.done_task', task_id=task.id ) }}">Ok</a></td>
          <td><a href="{{ url_for('task.delete_task', task_id=task.id ) }}">X</a></td>
          <td><a href="{{ url_for('task.modify_task', task_id=task.id ) }}">Editar</a> </td>
@@ -28,6 +25,9 @@
 {% endfor %}
 </table>
 
-
+{% if not current_user.is_anonymous %}
+<p>Nueva tarea ? <a href="{{ url_for('task.add_task') }}">Crear</a></p>
+<p>Exportar a excel ? <a href="{{ url_for('task.export') }}">Presione aquí</a></p>
+{% endif %}
 
 {% endblock content %}

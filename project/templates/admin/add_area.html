@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% from "_formhelpers.html" import render_field %}
+
+{% block content %}
+
+
+<form class="form" action="{{ url_for('admin.add_area') }}" method="post">
+
+		{{ form.hidden_tag()  }}
+	{% for field in form if field.type not in ["HiddenField", "CSRFTokenField"] %}
+	<div class="form-group">
+		{{ render_field(field) }}
+	</div>
+	{% endfor %}
+</form>
+
+{% endblock content %}

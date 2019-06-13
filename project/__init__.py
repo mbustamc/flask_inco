@@ -34,6 +34,9 @@ def create_app():
 	from project.auth import bp as auth
 	application.register_blueprint(auth, url_prefix='/auth')
 
+	from project.admin import bp as admin
+	application.register_blueprint(admin, url_prefix='/admin')
+
 	from project.errors import bp as errors
 	application.register_blueprint(errors)
 	
