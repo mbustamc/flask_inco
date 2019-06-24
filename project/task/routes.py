@@ -87,30 +87,20 @@ def done_task(task_id):
     return redirect(url_for('task.list'))
 
 
-"""
-@bp.route("/export")
-def export():
-    tasks = Task.query.all()
-    return jsonify(data=[task.serialize for task in tasks])
-    #return jsonify(all_args)
-"""
-
 @bp.route("/import", methods=['GET', 'POST'])
 def do_import():
     if request.method == 'POST':
         def task_init_func(row):
-            p = Task(row['content'], row['done'])
+            p = Task(content = row['content'])
+            p.area = row['area']
             return p
-        request.save_book_to_database(field_name='file', session=db.session,
-                                      tables=[Task],
-                                      initializers=[task_init_func])
+        request.save_book_to_database(field_name='file', session=db.session, tables=[Task], initializers=[task_init_func])
         return "Saved"
     return render_template('task/import.html')
 
 @bp.route("/export", methods=['GET'])
 def export():
-    #return excel.make_response_from_tables(db.session, [Task], "xls")
     filtered_task = Task.query.filter_by(done=False).all()
     column_names = ['id', 'area', 'content']
-    #eturn excel.make_response_from_tables(db.session, [Task], "xls")
-    return excel.make_response_from_query_sets(filtered_task, column_names, "xls")
+    #return excel.make_response_from_query_sets(filtered_task, column_names, "xls")
+    return excel.make_response_from_tables(db.session, [Task], "xls")

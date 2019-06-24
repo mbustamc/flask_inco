@@ -1,37 +1,36 @@
 
-from flask import render_template, flash, redirect, url_for, session, request, jsonify
-from flask_login import login_required, current_user
-import flask_excel as excel
+#app/bp_admin/views.py
+from flask import Blueprint, flash, redirect, render_template, request, url_for, current_app, session
+from flask_login import login_required, login_user, logout_user, current_user
+
+from flask_admin import Admin, BaseView, expose
+from flask_admin.contrib.sqla import ModelView
+
+from project import fl_admin
+from project import db
+
+from project.models import *
+from config import Config
 
 
 
 from project.admin import bp
-from project import db
-
-from project.models import *
-
-from .forms import *
-
-@bp.route('/area')
-#@login_required
-def list_area():
-    areas = Area.query.all()
-    return render_template('admin/list_area.html', areas=areas)
 
 
-@bp.route('/add_area', methods=['POST', 'GET'])
-@login_required
-def add_area():
-    title = "Add Area"
-    form = AreaForm()
+class RestrictedView(ModelView):
+    page_size = 50
 
-    #areas = Area.query.all()
-    #form.areas.choices = [(areas.id, areas.nombre) for areas in Area.query.all()]
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.is_admin
 
-    if form.validate_on_submit():
-        area = Area()
-        form.populate_obj(area)
-        db.session.add(area)
-        db.session.commit()
-        return redirect(url_for('admin.list_area'))
-    return render_template('admin/add_area.html', title=title, form=form)
+    def inaccessible_callback(self, name, **kwargs):
+        # redirect to login page if user doesn't have access
+        return redirect(url_for('login', next=request.url))
+
+
+
+fl_admin.add_view(RestrictedView(User, db.session))
+#admin.add_view(RestrictedView(Task, db.session))
+fl_admin.add_view(RestrictedView(Area, db.session))
+fl_admin.add_view(RestrictedView(Maquina, db.session))
+

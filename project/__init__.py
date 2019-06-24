@@ -5,11 +5,15 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import flask_excel as excel
 
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
+
 from flask_login import LoginManager
 
 
 db = SQLAlchemy()
 login = LoginManager()
+fl_admin = Admin(name='Template!', template_mode='bootstrap3')
 
 def create_app():
 
@@ -19,9 +23,13 @@ def create_app():
 	excel.init_excel(application)
 	db.init_app(application)
 	migrate = Migrate(application, db)
+	
+	fl_admin.init_app(application)
+
 	login.init_app(application)
 	login.login_message = 'You must be logged in to access this page.'
 	login.login_view = 'auth.login'
+	
 
 	from project import models
 
@@ -34,8 +42,8 @@ def create_app():
 	from project.auth import bp as auth
 	application.register_blueprint(auth, url_prefix='/auth')
 
-	from project.admin import bp as admin
-	application.register_blueprint(admin, url_prefix='/admin')
+	from project.admin import bp as admin_bp
+	application.register_blueprint(admin_bp)
 
 	from project.errors import bp as errors
 	application.register_blueprint(errors)
