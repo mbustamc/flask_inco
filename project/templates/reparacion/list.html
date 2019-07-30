@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% from "_formhelpers.html" import render_field %}
+
+{% block content %}
+
+
+<table class="table">
+<tr><th>Maquina</th>
+    <th>Reparacion</th>
+    <th>Fecha</th>
+       <th>Modificar</th>
+  </tr>
+  
+  {% for reparacion in reparaciones %}
+  <tr>
+    <td>{{ reparacion.maquina}}</td>
+    <td>  {{ reparacion.content }}</td>
+    <td>  {{ reparacion.created.strftime('%d-%m-%Y')  }}</td>
+        <td><a href="{{ url_for('reparacion.modify_reparacion', reparacion_id=reparacion.id ) }}">Editar</a> </td>
+    </tr>
+{% endfor %}
+</table>
+
+{% if not current_user.is_anonymous %}
+<p>Nueva tarea ? <a href="{{ url_for('reparacion.add_reparacion') }}">Crear</a></p>
+<p>Exportar a excel ? <a href="{{ url_for('reparacion.export') }}">Presione aquí</a></p>
+
+
+
+
+{% endif %}
+
+{% endblock content %}

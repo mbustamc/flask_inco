@@ -3,10 +3,10 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for, current_app, session
 from flask_login import login_required, login_user, logout_user, current_user
 
-from flask_admin import Admin, BaseView, expose
+#from flask_admin import Admin, BaseView, expose
 from flask_admin.contrib.sqla import ModelView
 
-from project import fl_admin
+from project import admin
 from project import db
 
 from project.models import *
@@ -29,8 +29,10 @@ class RestrictedView(ModelView):
 
 
 
-fl_admin.add_view(RestrictedView(User, db.session))
+admin.add_view(RestrictedView(User, db.session))
 #admin.add_view(RestrictedView(Task, db.session))
-fl_admin.add_view(RestrictedView(Area, db.session))
-fl_admin.add_view(RestrictedView(Maquina, db.session))
 
+#admin.add_view(RestrictedView(Reparacion, db.session))
+admin.add_view(RestrictedView(Area, db.session))
+admin.add_view(RestrictedView(Maquina, db.session))
+admin.add_view(RestrictedView(Estado, db.session))

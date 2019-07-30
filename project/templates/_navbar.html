@@ -1,14 +1,30 @@
-<nav>
-	<h1>Template!</h1>
-	<ul>
-	
-	<li><a href="{{ url_for('main.index') }}">Home</a></li>
-	{% if current_user.is_anonymous %}
-	<li><a href="{{ url_for('auth.login') }}">Login</a></li>
-	{% else %}
-		<li><a href="{{ url_for('task.list')}}">Tareas</a></li>
-		<li><a href="{{ url_for('auth.user', username=current_user.username)}}">Tu perfil</a></li>
-	<li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
-	{% endif %}
-	<hr>
+
+
+
+<nav class="navbar navbar-default navbar-static-top">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#base-nav-collapse"><i class="fa fa-bars"></i></button>
+			<a href="{{ url_for('main.index') }}" class="navbar-brand"><strong>Home</strong></a>
+		</div>
+		<div class="collapse navbar-collapse" id="base-nav-collapse">
+			<ul class="nav navbar-nav">
+				<li><a href="{{ url_for('main.index') }}">Home</a></li>
+				{% if current_user.is_anonymous %}
+				<li><a href="{{ url_for('auth.login') }}">Login</a></li>
+				{% else %}
+				<li><a href="{{ url_for('task.list')}}">Tareas</a></li>
+				<li><a href="{{ url_for('reparacion.list')}}">Reparaciones</a></li>
+				<li><a href="{{ url_for('auth.user', username=current_user.username)}}">Tu perfil</a></li>
+				<li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+				{% endif %}
+				{% if current_user.is_admin %}
+				<li><a href="{{ url_for('admin.index') }}">Admin</a></li>
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+
+
+
 </nav>

@@ -16,8 +16,17 @@ from .forms import TaskForm
 @bp.route('/')
 #@login_required
 def list():
-    tasks = Task.query.all()
+    #tasks = Task.query.all()
+    tasks = Task.query.filter_by(done=False)
     return render_template('task/list.html', tasks=tasks)
+
+
+@bp.route('/done')
+#@login_required
+def done():
+    tasks = Task.query.filter_by(done=True)
+    return render_template('task/list.html', tasks=tasks)
+
 
 
 @bp.route('/task', methods=['POST', 'GET'])
@@ -25,12 +34,14 @@ def list():
 def add_task():
     title = "Add TaskForm"
     form = TaskForm()
-
+    form.area_id.choices = [(x.id, x.name) for x in Area.query.all()]
+    form.estado_id.choices = [(x.id, x.name) for x in Estado.query.all()]
     
     if form.validate_on_submit():
         content = request.form.get('content')
         task = Task(content)
-        task.area = form.area.data
+        task.area_id = form.area_id.data
+        task.estado_id = form.estado_id.data
         db.session.add(task)
         db.session.commit()
         return redirect(url_for('task.list'))
@@ -54,18 +65,23 @@ def delete_task(task_id):
 def modify_task(task_id):
     title='Actualiza tarea'
     task = Task.query.get(task_id)
-    form = TaskForm()
+    form = TaskForm(obj=task)
+    form.area_id.choices = [(x.id, x.name) for x in Area.query.all()]
+    form.estado_id.choices = [(x.id, x.name) for x in Estado.query.all()]
+
     if form.validate_on_submit():
         task.content = form.content.data
-        task.area = form.area.data
+        task.area_id = form.area_id.data
+        task.estado_id = form.estado_id.data
+
         task.modify = datetime.utcnow()
         db.session.commit()
         flash('Your changes have been saved.')
         return redirect(url_for('task.list'))
     elif request.method == 'GET':
-        #form.populate_obj(task)
-        form.content.data = task.content
-        form.area.data = task.area
+        form.populate_obj(task)
+        #form.content.data = task.content
+        #form.maquina_id.data = task.maquina_id
     return render_template('task/modify_task.html', title=title, task=task,
         form=form)
 
@@ -92,7 +108,7 @@ def do_import():
     if request.method == 'POST':
         def task_init_func(row):
             p = Task(content = row['content'])
-            p.area = row['area']
+            #p.area = row['area']
             return p
         request.save_book_to_database(field_name='file', session=db.session, tables=[Task], initializers=[task_init_func])
         return "Saved"
@@ -101,6 +117,6 @@ def do_import():
 @bp.route("/export", methods=['GET'])
 def export():
     filtered_task = Task.query.filter_by(done=False).all()
-    column_names = ['id', 'area', 'content']
-    #return excel.make_response_from_query_sets(filtered_task, column_names, "xls")
-    return excel.make_response_from_tables(db.session, [Task], "xls")
+    column_names = ['id','area_id', 'estado_id', 'content']
+    return excel.make_response_from_query_sets(filtered_task, column_names, "xls")
+    #return excel.make_response_from_tables(db.session, [Task], "xls")

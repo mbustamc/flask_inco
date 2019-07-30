@@ -1,16 +1,43 @@
-<!doctype html>
-<title>{% block title %}{% endblock %} - Template</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-{% include "_navbar.html" %}
+	
+<!DOCTYPE html>
+<html>
 
-<section class="content">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>{% block title %}{% endblock %} - Template</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"/>
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/united/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='app.css') }}"/>
+</head>
+
+
+<body>
+
+
+
+
+
 	<header>
 		{% block header %}{% endblock %}
 	</header>
-	{% for message in get_flashed_messages() %}
-	<div class="flash">{{ message }}</div>
+{% include "_navbar.html" %}
+
+	<div class="container"> <div class="row"><div class="col-md-12">
+		{% for message in get_flashed_messages() %}
+		<div class="flash">{{ message }}</div>
+	</div></div></div>
 	{% endfor %}
-	<div>
+	
+	<div class="container"> <div class="row"><div class="col-md-12">
 		{% block content %}{% endblock %}
-	</div>
-</section>
+	</div></div></div>
+
+
+
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+ </body>
+</html>

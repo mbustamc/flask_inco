@@ -4,23 +4,33 @@
 {% block content %}
 
 
-<table>
-<tr><th>Area</th>
+<ul class="nav nav-pills">
+  <li role="presentation"><a href="{{ url_for('task.list') }}">Pendientes</a></li>
+  <li role="presentation"><a href="{{ url_for('task.done') }}">Resueltas</a></li>
+</ul>
+
+<table class="table">
+<tr>
+  <th>Id</th>
+  <th>Estado</th>
+  <th>Area</th>
     <th>Tarea</th>
     <th>Resolver</th>
     <th>Borrar</th>
-        <th>Modificar</th>
+    <th>Modificar</th>
   </tr>
   
-  {% for task in tasks %}
+
+  {% for task in tasks|sort(attribute='id') %}
   <tr>
-    <td>
-      {% if task.done %} <strike> {% endif %}{{ task.area }} {% if task.done %} </strike>{% endif %}</td>
-   <td> 
-        {% if task.done %} <strike> {% endif %}{{ task.content }} {% if task.done %} </strike>{% endif %}</td>
-       <td>  <a href="{{ url_for('task.done_task', task_id=task.id ) }}">Ok</a></td>
-         <td><a href="{{ url_for('task.delete_task', task_id=task.id ) }}">X</a></td>
-         <td><a href="{{ url_for('task.modify_task', task_id=task.id ) }}">Editar</a> </td>
+    <td>{{ task.id}}</td>
+    <td>{{ task.estado}}</td>
+    <td>{{ task.area}}</td>
+    <td>   {% if task.done %} <strike> {% endif %} {{ task.content }} {% if task.done %} </strike>{% endif %}</td>
+
+    <td> <a href="{{ url_for('task.done_task', task_id=task.id ) }}">Ok</a></td>
+    <td><a href="{{ url_for('task.delete_task', task_id=task.id ) }}">X</a></td>
+    <td><a href="{{ url_for('task.modify_task', task_id=task.id ) }}">Editar</a> </td>
     </tr>
 {% endfor %}
 </table>

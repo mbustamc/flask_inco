@@ -13,7 +13,7 @@ from flask_login import LoginManager
 
 db = SQLAlchemy()
 login = LoginManager()
-fl_admin = Admin(name='Template!', template_mode='bootstrap3')
+admin = Admin(name='Template!', template_mode='bootstrap3')
 
 def create_app():
 
@@ -24,7 +24,7 @@ def create_app():
 	db.init_app(application)
 	migrate = Migrate(application, db)
 	
-	fl_admin.init_app(application)
+	admin.init_app(application)
 
 	login.init_app(application)
 	login.login_message = 'You must be logged in to access this page.'
@@ -38,6 +38,9 @@ def create_app():
 
 	from project.task import bp as task
 	application.register_blueprint(task, url_prefix='/task')
+
+	from project.reparacion import bp as reparacion
+	application.register_blueprint(reparacion, url_prefix='/reparacion')
 
 	from project.auth import bp as auth
 	application.register_blueprint(auth, url_prefix='/auth')

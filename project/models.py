@@ -42,23 +42,39 @@ class Area(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True, unique=True)
     maquinas = db.relationship('Maquina', backref='area', lazy='dynamic')
+    tareas = db.relationship('Task', backref='area', lazy='dynamic')
 
     def __repr__(self):
-        return '<Area: %s>' % self.name
+        return '%s' % self.name
 
 
 class Maquina(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True, unique=True)
-    maquina_id = db.Column(db.Integer, db.ForeignKey('area.id'))
+    area_id = db.Column(db.Integer, db.ForeignKey('area.id'))
+    
+    reparaciones = db.relationship('Reparacion', backref='maquina', lazy='dynamic')
+
+    def __repr__(self):
+        return '%s' % self.name
+
+
+class Estado(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), index=True, unique=True)
+    tareas = db.relationship('Task', backref='estado', lazy='dynamic')
+
+    def __repr__(self):
+        return '%s' % self.name
 
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    area = db.Column(db.Text)
     content = db.Column(db.Text)
     done = db.Column(db.Boolean, default=False)
 
+    area_id = db.Column(db.Integer, db.ForeignKey('area.id'))
+    estado_id = db.Column(db.Integer, db.ForeignKey('estado.id'))
 
     created = db.Column(db.DateTime, default=datetime.utcnow)
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
@@ -70,4 +86,20 @@ class Task(db.Model):
         #self.done = done
 
     def __repr__(self):
-        return '<Content %s>' % self.content
+        return '%s' % self.content
+
+
+class Reparacion(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text)
+    maquina_id = db.Column(db.Integer, db.ForeignKey('maquina.id'))
+    created = db.Column(db.DateTime, default=datetime.utcnow)
+    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+    def __init__(self, content):
+        self.content = content
+        #self.done = done
+
+    def __repr__(self):
+        return '%s' % self.content
