@@ -1,6 +1,6 @@
 venv/
-
-app.db
+	
+app.db			
 
 *.pyc
 __pycache__/
