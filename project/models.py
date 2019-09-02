@@ -93,6 +93,7 @@ class Reparacion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text)
     maquina_id = db.Column(db.Integer, db.ForeignKey('maquina.id'))
+    detencion = db.Column(db.Integer)
     created = db.Column(db.DateTime, default=datetime.utcnow)
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
 

@@ -21,7 +21,7 @@ def list():
 
 
 @bp.route('/reparacion', methods=['POST', 'GET'])
-@login_required
+#@login_required
 def add_reparacion():
     title = "Add Reparacion"
     form = ReparacionForm()
@@ -31,6 +31,7 @@ def add_reparacion():
         content = request.form.get('content')
         reparacion = Reparacion(content)
         reparacion.maquina_id = form.maquina_id.data
+        reparacion.detencion = form.detencion.data
         db.session.add(reparacion)
         db.session.commit()
         return redirect(url_for('reparacion.list'))
@@ -38,7 +39,7 @@ def add_reparacion():
 
 
 @bp.route('/modify/<int:reparacion_id>', methods=['GET', 'POST'])
-@login_required
+#@login_required
 def modify_reparacion(reparacion_id):
     title='Actualiza reparacion'
     reparacion = Reparacion.query.get(reparacion_id)
@@ -49,6 +50,7 @@ def modify_reparacion(reparacion_id):
         #reparacion = request.form[form]
         reparacion.content = form.content.data
         reparacion.maquina_id = form.maquina_id.data
+        reparacion.detencion = int(form.detencion.data)
         reparacion.created = form.created.data
         reparacion.modify = datetime.utcnow()
         db.session.commit()
