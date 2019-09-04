@@ -12,9 +12,10 @@
 <table class="table">
 <tr>
   <th>Id</th>
-  <th>Estado</th>
+  
   <th>Area</th>
     <th>Tarea</th>
+    <th>Estado</th>
     <th>Resolver</th>
     <th>Borrar</th>
     <th>Modificar</th>
@@ -24,10 +25,11 @@
   {% for task in tasks|sort(attribute='estado_id')|sort(attribute='area_id')%}
   <tr>
     <td>{{ task.id}}</td>
-    <td>{{ task.estado}}</td>
     <td>{{ task.area}}</td>
+    
+    
     <td>   {% if task.done %} <strike> {% endif %} {{ task.content }} {% if task.done %} </strike>{% endif %}</td>
-
+  <td>{{ task.estado}}</td>
     <td> <a href="{{ url_for('task.done_task', task_id=task.id ) }}">Ok</a></td>
     <td><a href="{{ url_for('task.delete_task', task_id=task.id ) }}">X</a></td>
     <td><a href="{{ url_for('task.modify_task', task_id=task.id ) }}">Editar</a> </td>
