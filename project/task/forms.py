@@ -6,7 +6,8 @@ from project.models import *
 
 from project import db
 
-
+choices_content = []
+choices_content.append(('uno', 'uno'))
 
 class TaskForm(FlaskForm):
 	area_id = SelectField('Area', coerce=int)

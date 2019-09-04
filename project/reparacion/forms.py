@@ -17,10 +17,14 @@ choices_detencion=[('10', '10 min'),
 	('150', '2,5, hrs'),
 	('180', '3, hrs'),]
 
+choices_content = []
+choices_content.append(('uno', 'uno'))
+
 
 class ReparacionForm(FlaskForm):
 	maquina_id = SelectField('Maquina', coerce=int)
-	content = TextAreaField('Descripcion Breve', validators=[Length(min=0, max=300)])
+	#content = TextAreaField('Descripcion Breve', validators=[Length(min=0, max=300)])
+	content = SelectField('Descripcion', choices = choices_content, validators = [DataRequired()])
 	detencion= SelectField(
         'Duracion detencion',
         choices=choices_detencion, validators = [DataRequired()])
