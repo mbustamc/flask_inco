@@ -91,16 +91,33 @@ class Task(db.Model):
 
 class Reparacion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.Text)
     maquina_id = db.Column(db.Integer, db.ForeignKey('maquina.id'))
-    detencion = db.Column(db.Integer)
+    detencion_id = db.Column(db.Integer, db.ForeignKey('detencion.id'))
+    duracion = db.Column(db.Integer)
+    comentarios = db.Column(db.Text)
     created = db.Column(db.DateTime, default=datetime.utcnow)
-    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    modify = db.Column(db.DateTime, default=datetime.utcnow)
 
 
-    def __init__(self, content):
-        self.content = content
+    def __init__(self):
+        self.created = datetime.utcnow
         #self.done = done
 
     def __repr__(self):
-        return '%s' % self.content
+        return '%s %s' % self.detencion_id, self.created
+
+
+class Detencion(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text)
+    reparaciones = db.relationship('Reparacion', backref='detencion', lazy='dynamic')
+
+
+    def __init__(self):
+        pass
+        #self.name = name
+        #self.done = done
+
+    def __repr__(self):
+        return '%s' % self.name
+

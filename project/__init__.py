@@ -39,8 +39,8 @@ def create_app():
 	from project.task import bp as task
 	application.register_blueprint(task, url_prefix='/task')
 
-	from project.reparacion import bp as reparacion
-	application.register_blueprint(reparacion, url_prefix='/reparacion')
+	from project.reparacion import bp as reparacion_bp
+	application.register_blueprint(reparacion_bp, url_prefix='/reparacion')
 
 	from project.auth import bp as auth
 	application.register_blueprint(auth, url_prefix='/auth')

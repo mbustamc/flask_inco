@@ -26,12 +26,15 @@ def add_reparacion():
     title = "Add Reparacion"
     form = ReparacionForm()
     form.maquina_id.choices = [(x.id, x.name) for x in Maquina.query.all()]
-    
+    form.detencion_id.choices = [(x.id, x.name) for x in Detencion.query.all()]
     if form.validate_on_submit():
-        content = request.form.get('content')
-        reparacion = Reparacion(content)
+        #content = request.form.get()
+        reparacion = Reparacion()
         reparacion.maquina_id = form.maquina_id.data
-        reparacion.detencion = form.detencion.data
+        reparacion.detencion_id= form.detencion_id.data
+        reparacion.duracion= int(form.duracion.data)
+        reparacion.comentarios = form.comentarios.data
+        reparacion.created = form.created.data
         db.session.add(reparacion)
         db.session.commit()
         return redirect(url_for('reparacion.list'))
@@ -45,12 +48,13 @@ def modify_reparacion(reparacion_id):
     reparacion = Reparacion.query.get(reparacion_id)
     form = ReparacionForm(obj=reparacion)
     form.maquina_id.choices = [(x.id, x.name) for x in Maquina.query.all()]
-
+    form.detencion_id.choices = [(x.id, x.name) for x in Detencion.query.all()]
     if form.validate_on_submit():
         #reparacion = request.form[form]
-        reparacion.content = form.content.data
         reparacion.maquina_id = form.maquina_id.data
-        reparacion.detencion = int(form.detencion.data)
+        reparacion.detencion_id= form.detencion_id.data
+        reparacion.duracion = int(form.duracion.data)
+        reparacion.comentarios = form.comentarios.data
         reparacion.created = form.created.data
         reparacion.modify = datetime.utcnow()
         db.session.commit()
