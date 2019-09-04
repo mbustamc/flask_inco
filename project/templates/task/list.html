@@ -21,7 +21,7 @@
   </tr>
   
 
-  {% for task in tasks|sort(attribute='id') %}
+  {% for task in tasks|sort(attribute='area_id')|sort(attribute='estado_id')%}
   <tr>
     <td>{{ task.id}}</td>
     <td>{{ task.estado}}</td>

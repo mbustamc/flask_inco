@@ -17,7 +17,7 @@ from .forms import TaskForm
 #@login_required
 def list():
     #tasks = Task.query.all()
-    tasks = Task.query.filter_by(done=False)
+    tasks = Task.query.filter_by(done=False).order_by(Task.area_id.desc())
     return render_template('task/list.html', tasks=tasks)
 
 
