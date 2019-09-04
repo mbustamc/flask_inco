@@ -26,7 +26,7 @@ def add_reparacion():
     title = "Add Reparacion"
     form = ReparacionForm()
     form.maquina_id.choices = [(x.id, x.name) for x in Maquina.query.all()]
-    form.detencion_id.choices = [(x.id, x.name) for x in Detencion.query.all()]
+    form.detencion_id.choices = [(x.id, x.name) for x in Detencion.query.all().order_by(Detencion.name)]
     if form.validate_on_submit():
         #content = request.form.get()
         reparacion = Reparacion()
@@ -48,7 +48,7 @@ def modify_reparacion(reparacion_id):
     reparacion = Reparacion.query.get(reparacion_id)
     form = ReparacionForm(obj=reparacion)
     form.maquina_id.choices = [(x.id, x.name) for x in Maquina.query.all()]
-    form.detencion_id.choices = [(x.id, x.name) for x in Detencion.query.all()]
+    form.detencion_id.choices = [(x.id, x.name) for x in Detencion.query.all().order_by(Detencion.name)]
     if form.validate_on_submit():
         #reparacion = request.form[form]
         reparacion.maquina_id = form.maquina_id.data
