@@ -20,6 +20,7 @@ choices_detencion=[
 	('210', '3,5 hrs'),
 	('240', '4 hrs'),
 	('270', '4,5 hrs'),
+	('540','4,5 hasta todo el turno')
 	]
 
 
