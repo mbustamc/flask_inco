@@ -104,7 +104,7 @@ class Reparacion(db.Model):
         #self.done = done
 
     def __repr__(self):
-        return '%s' % self.detencion_id
+        return '%self' % self.detencion_id
 
 
 class Detencion(db.Model):
