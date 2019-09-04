@@ -32,6 +32,6 @@ class ReparacionForm(FlaskForm):
 	duracion = SelectField(
         'Duracion detencion', choices = choices_detencion,
          validators = [DataRequired()])
-	comentarios = TextAreaField('Comentarios', validators=[Length(min=0, max=300)])
+	comentarios = TextAreaField('Comentarios (OPCIONAL)', validators=[Length(min=0, max=300)])
 	created = DateField(u'Creacion (dd-mm-aaaa)', format='%Y-%m-%d')
 	submit = SubmitField('Submit')
